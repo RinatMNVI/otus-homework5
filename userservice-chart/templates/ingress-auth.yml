@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: user-service-auth-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: arch.homework
+      http:
+        paths:
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service-auth
+                port:
+                  name: web
+          - path: /reg
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service-auth
+                port:
+                  name: web
+          - path: /login
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service-auth
+                port:
+                  name: web
+          - path: /logout
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service-auth
+                port:
+                  name: web
+          - path: /signin
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service-auth
+                port:
+                  name: web

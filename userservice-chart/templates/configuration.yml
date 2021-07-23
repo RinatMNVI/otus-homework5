@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-config
+data:
+  DB_URL: {{ .Values.db.url }}
+  JWT_SALT: {{ .Values.jwt.salt | b64dec }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: user-service-config-secret
+type: Opaque
+data:
+  DB_USER: {{ .Values.db.username | b64enc }}
+  DB_PASS: {{ .Values.db.password | b64enc }}

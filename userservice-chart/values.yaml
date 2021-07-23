@@ -1,0 +1,21 @@
+db:
+  url: jdbc:postgresql://postgres/users
+  username: postgres
+  password: postgres
+
+userservice:
+  image: rinatm/userservice:v4
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 8080
+
+userservice_auth:
+  image: rinatm/userservice-auth:v1
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 8081
+
+jwt:
+  salt: FFB0091C3B9655B13BC662AF586B4ED6067F008A4ED333589566D

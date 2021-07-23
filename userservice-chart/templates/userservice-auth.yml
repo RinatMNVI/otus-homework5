@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-auth-deployment
+spec:
+  replicas: {{ .Values.userservice_auth.replicaCount }}
+  selector:
+    matchLabels:
+      app: user-service-auth-app
+  template:
+    metadata:
+      labels:
+        app: user-service-auth-app
+    spec:
+      containers:
+        - name: users
+          image: {{ .Values.userservice_auth.image }}
+          env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: DB_URL
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-config-secret
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-config-secret
+                  key: DB_PASS
+            - name: JWT_SALT
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: JWT_SALT
+          ports:
+            - containerPort: {{ .Values.userservice_auth.service.port }}
+              name: web
+          imagePullPolicy: IfNotPresent
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service-auth
+spec:
+  selector:
+    app: user-service-auth-app
+  ports:
+    - protocol: TCP
+      port: {{ .Values.userservice_auth.service.port }}
+      targetPort: web
+      name: web
+  type: {{ .Values.userservice_auth.service.type }}
+
